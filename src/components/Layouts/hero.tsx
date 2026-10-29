@@ -2,7 +2,7 @@
 const Hero = () =>
 {
     return (
-        <section className="max-w-6xl mx-auto mt-8 bg-blue-100 flex justify-between grid grid-cols-2 p-[4rem] rounded-4xl">
+        <section className="max-w-6xl mx-auto mt-8 bg-blue-100 flex justify-between grid grid-cols-2 p-16 rounded-4xl">
             <div className="flex flex-col justify-center gap-4">
                 <div className="">
                     <span className="text-red-800 font-medium rounded-full bg-red-100 px-3">Up to 17% off this week</span>
