@@ -5,6 +5,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import '../styles.css'
 import type { QueryClient } from '@tanstack/react-query'
+import { Footer } from '#/components/Layouts/footer'
 
 interface MyRouterContext
 {
@@ -19,6 +20,7 @@ function RootComponent() {
     <>
       <Headers />
       <Outlet />
+      <Footer/>
       <TanStackDevtools
         config={{
           position: 'bottom-right',

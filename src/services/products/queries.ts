@@ -23,7 +23,7 @@ const getProductById = async (id: string)=>{
 }
 export const getProductByIdQuery = (id: string) =>
 {
-    useQuery({
+   return useQuery({
         queryKey: ['product', id],
         queryFn:()=>getProductById(id)
     })

@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
   const queryClient = new QueryClient()
 const router = createRouter({
   routeTree,
-  defaultPreload: 'intent',
-  scrollRestoration: true,
+  defaultPreload: "intent",
+  scrollRestoration: false,
   context: {
     queryClient,
   }
