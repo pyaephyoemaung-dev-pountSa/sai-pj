@@ -5,7 +5,7 @@ import { Route, useParams, useRouter, useSearch } from "@tanstack/react-router";
 import { Star, StarHalf } from "lucide-react";
 import RatingCard from "../home/components/ratingCard";
 import ReviewCard from "../home/components/reviewCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 
 const productDetails = () =>
@@ -86,7 +86,7 @@ const productDetails = () =>
                         <div className="border-2 rounded-full flex items-center">
                             <Button onClick={handleDecrese} title="-"/>
                             <span className="px-4 py-2">{count}</span>
-                            <Button onClick={handleIncrese} title="+"/>
+                            <Button disabled={count === (data?.stock || 0)} onClick={handleIncrese} title="+"/>
                         </div>
                         <button className="bg-blue-500 text-white px-4 py-2 rounded-full w-full">Add to cart ${((data?.price || 0) * count).toFixed(2)}</button>
                     </div>
@@ -105,7 +105,7 @@ interface ButtonProps
     onClick: () => void
     title: string
 }
-const Button = ({onClick,title}: ButtonProps) =>
+const Button = ({onClick,title}: ButtonProps & ComponentProps<"button">) =>
 {
     return (
         <button onClick={onClick} className="text-black px-3.5 py-2 rounded-lg">{title}</button>

@@ -9,8 +9,8 @@ const navLink = [{
         title: 'Cart',
         link:'/cart'
     }, {
-        title: 'Sign in',
-        link:'sign-in'
+        title: 'Register',
+        link:'/register'
     }
 ]
 export default navLink;

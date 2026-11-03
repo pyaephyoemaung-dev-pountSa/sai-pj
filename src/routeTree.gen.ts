@@ -9,87 +9,207 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as authRouteRouteImport } from './routes/(auth)/route'
+import { Route as shopRouteRouteImport } from './routes/(shop)/route'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as shopIndexRouteImport } from './routes/(shop)/index'
 import { Route as shopProductsProductIdRouteImport } from './routes/(shop)/products/$productId'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 
-const authRegisterRoute = authRegisterRouteImport.update({
-  id: '/(auth)/register',
-  path: '/register',
+const authRouteRoute = authRouteRouteImport.update({
+  id: '/(auth)',
   getParentRoute: () => rootRouteImport,
+} as any)
+const shopRouteRoute = shopRouteRouteImport.update({
+  id: '/(shop)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authRegisterRoute = authRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => authRouteRoute,
 } as any)
 const shopIndexRoute = shopIndexRouteImport.update({
-  id: '/(shop)/',
+  id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => shopRouteRoute,
 } as any)
 const shopProductsProductIdRoute = shopProductsProductIdRouteImport.update({
-  id: '/(shop)/products/$productId',
+  id: '/products/$productId',
   path: '/products/$productId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => shopRouteRoute,
 } as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/register': typeof authRegisterRoute
   '/': typeof shopIndexRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
   '/products/$productId': typeof shopProductsProductIdRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
-  '/register': typeof authRegisterRoute
   '/': typeof shopIndexRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
   '/products/$productId': typeof shopProductsProductIdRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/(auth)': typeof authRouteRouteWithChildren
+  '/(shop)': typeof shopRouteRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/(auth)/login': typeof authLoginRoute
   '/(auth)/register': typeof authRegisterRoute
   '/(shop)/': typeof shopIndexRoute
   '/(shop)/products/$productId': typeof shopProductsProductIdRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/register' | '/' | '/products/$productId'
+  fullPaths:
+    '/' | '/login' | '/register' | '/products/$productId' | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/register' | '/' | '/products/$productId'
+  to: '/' | '/login' | '/register' | '/products/$productId' | '/dashboard'
   id:
-    '__root__' | '/(auth)/register' | '/(shop)/' | '/(shop)/products/$productId'
+    | '__root__'
+    | '/(auth)'
+    | '/(shop)'
+    | '/_authenticated'
+    | '/(auth)/login'
+    | '/(auth)/register'
+    | '/(shop)/'
+    | '/(shop)/products/$productId'
+    | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  authRegisterRoute: typeof authRegisterRoute
-  shopIndexRoute: typeof shopIndexRoute
-  shopProductsProductIdRoute: typeof shopProductsProductIdRoute
+  authRouteRoute: typeof authRouteRouteWithChildren
+  shopRouteRoute: typeof shopRouteRouteWithChildren
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/(auth)': {
+      id: '/(auth)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof authRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(shop)': {
+      id: '/(shop)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof shopRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof authRouteRoute
+    }
     '/(auth)/register': {
       id: '/(auth)/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof authRegisterRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof authRouteRoute
     }
     '/(shop)/': {
       id: '/(shop)/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof shopIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof shopRouteRoute
     }
     '/(shop)/products/$productId': {
       id: '/(shop)/products/$productId'
       path: '/products/$productId'
       fullPath: '/products/$productId'
       preLoaderRoute: typeof shopProductsProductIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof shopRouteRoute
+    }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
+interface authRouteRouteChildren {
+  authLoginRoute: typeof authLoginRoute
+  authRegisterRoute: typeof authRegisterRoute
+}
+
+const authRouteRouteChildren: authRouteRouteChildren = {
+  authLoginRoute: authLoginRoute,
   authRegisterRoute: authRegisterRoute,
+}
+
+const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
+  authRouteRouteChildren,
+)
+
+interface shopRouteRouteChildren {
+  shopIndexRoute: typeof shopIndexRoute
+  shopProductsProductIdRoute: typeof shopProductsProductIdRoute
+}
+
+const shopRouteRouteChildren: shopRouteRouteChildren = {
   shopIndexRoute: shopIndexRoute,
   shopProductsProductIdRoute: shopProductsProductIdRoute,
+}
+
+const shopRouteRouteWithChildren = shopRouteRoute._addFileChildren(
+  shopRouteRouteChildren,
+)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  authRouteRoute: authRouteRouteWithChildren,
+  shopRouteRoute: shopRouteRouteWithChildren,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
