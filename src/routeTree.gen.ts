@@ -9,46 +9,47 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as authRouteRouteImport } from './routes/(auth)/route'
-import { Route as shopRouteRouteImport } from './routes/(shop)/route'
+import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as authLoginRouteImport } from './routes/(auth)/login'
-import { Route as authRegisterRouteImport } from './routes/(auth)/register'
-import { Route as shopIndexRouteImport } from './routes/(shop)/index'
-import { Route as shopProductsProductIdRouteImport } from './routes/(shop)/products/$productId'
+import { Route as AppauthRouteRouteImport } from './routes/_app/(auth)/route'
+import { Route as AppshopRouteRouteImport } from './routes/_app/(shop)/route'
+import { Route as AppauthLoginRouteImport } from './routes/_app/(auth)/login'
+import { Route as AppauthRegisterRouteImport } from './routes/_app/(auth)/register'
+import { Route as AppshopIndexRouteImport } from './routes/_app/(shop)/index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
+import { Route as AuthenticatedUsersIndexRouteImport } from './routes/_authenticated/users/index'
+import { Route as AppshopProductsProductIdRouteImport } from './routes/_app/(shop)/products/$productId'
 
-const authRouteRoute = authRouteRouteImport.update({
-  id: '/(auth)',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const shopRouteRoute = shopRouteRouteImport.update({
-  id: '/(shop)',
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authLoginRoute = authLoginRouteImport.update({
+const AppauthRouteRoute = AppauthRouteRouteImport.update({
+  id: '/(auth)',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppshopRouteRoute = AppshopRouteRouteImport.update({
+  id: '/(shop)',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppauthLoginRoute = AppauthLoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => authRouteRoute,
+  getParentRoute: () => AppauthRouteRoute,
 } as any)
-const authRegisterRoute = authRegisterRouteImport.update({
+const AppauthRegisterRoute = AppauthRegisterRouteImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => authRouteRoute,
+  getParentRoute: () => AppauthRouteRoute,
 } as any)
-const shopIndexRoute = shopIndexRouteImport.update({
+const AppshopIndexRoute = AppshopIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => shopRouteRoute,
-} as any)
-const shopProductsProductIdRoute = shopProductsProductIdRouteImport.update({
-  id: '/products/$productId',
-  path: '/products/$productId',
-  getParentRoute: () => shopRouteRoute,
+  getParentRoute: () => AppshopRouteRoute,
 } as any)
 const AuthenticatedDashboardIndexRoute =
   AuthenticatedDashboardIndexRouteImport.update({
@@ -56,70 +57,90 @@ const AuthenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedUsersIndexRoute = AuthenticatedUsersIndexRouteImport.update({
+  id: '/users/',
+  path: '/users/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AppshopProductsProductIdRoute =
+  AppshopProductsProductIdRouteImport.update({
+    id: '/products/$productId',
+    path: '/products/$productId',
+    getParentRoute: () => AppshopRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof shopIndexRoute
-  '/login': typeof authLoginRoute
-  '/register': typeof authRegisterRoute
-  '/products/$productId': typeof shopProductsProductIdRoute
+  '/': typeof AppshopIndexRoute
+  '/login': typeof AppauthLoginRoute
+  '/register': typeof AppauthRegisterRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/users/': typeof AuthenticatedUsersIndexRoute
+  '/products/$productId': typeof AppshopProductsProductIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof shopIndexRoute
-  '/login': typeof authLoginRoute
-  '/register': typeof authRegisterRoute
-  '/products/$productId': typeof shopProductsProductIdRoute
+  '/': typeof AppshopIndexRoute
+  '/login': typeof AppauthLoginRoute
+  '/register': typeof AppauthRegisterRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/users': typeof AuthenticatedUsersIndexRoute
+  '/products/$productId': typeof AppshopProductsProductIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(auth)': typeof authRouteRouteWithChildren
-  '/(shop)': typeof shopRouteRouteWithChildren
+  '/_app': typeof AppRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/(auth)/login': typeof authLoginRoute
-  '/(auth)/register': typeof authRegisterRoute
-  '/(shop)/': typeof shopIndexRoute
-  '/(shop)/products/$productId': typeof shopProductsProductIdRoute
+  '/_app/(auth)': typeof AppauthRouteRouteWithChildren
+  '/_app/(shop)': typeof AppshopRouteRouteWithChildren
+  '/_app/(auth)/login': typeof AppauthLoginRoute
+  '/_app/(auth)/register': typeof AppauthRegisterRoute
+  '/_app/(shop)/': typeof AppshopIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
+  '/_app/(shop)/products/$productId': typeof AppshopProductsProductIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/login' | '/register' | '/products/$productId' | '/dashboard/'
+    | '/'
+    | '/login'
+    | '/register'
+    | '/dashboard/'
+    | '/users/'
+    | '/products/$productId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/products/$productId' | '/dashboard'
+  to:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/dashboard'
+    | '/users'
+    | '/products/$productId'
   id:
     | '__root__'
-    | '/(auth)'
-    | '/(shop)'
+    | '/_app'
     | '/_authenticated'
-    | '/(auth)/login'
-    | '/(auth)/register'
-    | '/(shop)/'
-    | '/(shop)/products/$productId'
+    | '/_app/(auth)'
+    | '/_app/(shop)'
+    | '/_app/(auth)/login'
+    | '/_app/(auth)/register'
+    | '/_app/(shop)/'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/users/'
+    | '/_app/(shop)/products/$productId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  authRouteRoute: typeof authRouteRouteWithChildren
-  shopRouteRoute: typeof shopRouteRouteWithChildren
+  AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(auth)': {
-      id: '/(auth)'
+    '/_app': {
+      id: '/_app'
       path: ''
-      fullPath: ''
-      preLoaderRoute: typeof authRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(shop)': {
-      id: '/(shop)'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof shopRouteRouteImport
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -129,33 +150,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(auth)/login': {
-      id: '/(auth)/login'
+    '/_app/(auth)': {
+      id: '/_app/(auth)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppauthRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/(shop)': {
+      id: '/_app/(shop)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppshopRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/(auth)/login': {
+      id: '/_app/(auth)/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof authLoginRouteImport
-      parentRoute: typeof authRouteRoute
+      preLoaderRoute: typeof AppauthLoginRouteImport
+      parentRoute: typeof AppauthRouteRoute
     }
-    '/(auth)/register': {
-      id: '/(auth)/register'
+    '/_app/(auth)/register': {
+      id: '/_app/(auth)/register'
       path: '/register'
       fullPath: '/register'
-      preLoaderRoute: typeof authRegisterRouteImport
-      parentRoute: typeof authRouteRoute
+      preLoaderRoute: typeof AppauthRegisterRouteImport
+      parentRoute: typeof AppauthRouteRoute
     }
-    '/(shop)/': {
-      id: '/(shop)/'
+    '/_app/(shop)/': {
+      id: '/_app/(shop)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof shopIndexRouteImport
-      parentRoute: typeof shopRouteRoute
-    }
-    '/(shop)/products/$productId': {
-      id: '/(shop)/products/$productId'
-      path: '/products/$productId'
-      fullPath: '/products/$productId'
-      preLoaderRoute: typeof shopProductsProductIdRouteImport
-      parentRoute: typeof shopRouteRoute
+      preLoaderRoute: typeof AppshopIndexRouteImport
+      parentRoute: typeof AppshopRouteRoute
     }
     '/_authenticated/dashboard/': {
       id: '/_authenticated/dashboard/'
@@ -164,51 +192,80 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/users/': {
+      id: '/_authenticated/users/'
+      path: '/users'
+      fullPath: '/users/'
+      preLoaderRoute: typeof AuthenticatedUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_app/(shop)/products/$productId': {
+      id: '/_app/(shop)/products/$productId'
+      path: '/products/$productId'
+      fullPath: '/products/$productId'
+      preLoaderRoute: typeof AppshopProductsProductIdRouteImport
+      parentRoute: typeof AppshopRouteRoute
+    }
   }
 }
 
-interface authRouteRouteChildren {
-  authLoginRoute: typeof authLoginRoute
-  authRegisterRoute: typeof authRegisterRoute
+interface AppauthRouteRouteChildren {
+  AppauthLoginRoute: typeof AppauthLoginRoute
+  AppauthRegisterRoute: typeof AppauthRegisterRoute
 }
 
-const authRouteRouteChildren: authRouteRouteChildren = {
-  authLoginRoute: authLoginRoute,
-  authRegisterRoute: authRegisterRoute,
+const AppauthRouteRouteChildren: AppauthRouteRouteChildren = {
+  AppauthLoginRoute: AppauthLoginRoute,
+  AppauthRegisterRoute: AppauthRegisterRoute,
 }
 
-const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
-  authRouteRouteChildren,
+const AppauthRouteRouteWithChildren = AppauthRouteRoute._addFileChildren(
+  AppauthRouteRouteChildren,
 )
 
-interface shopRouteRouteChildren {
-  shopIndexRoute: typeof shopIndexRoute
-  shopProductsProductIdRoute: typeof shopProductsProductIdRoute
+interface AppshopRouteRouteChildren {
+  AppshopIndexRoute: typeof AppshopIndexRoute
+  AppshopProductsProductIdRoute: typeof AppshopProductsProductIdRoute
 }
 
-const shopRouteRouteChildren: shopRouteRouteChildren = {
-  shopIndexRoute: shopIndexRoute,
-  shopProductsProductIdRoute: shopProductsProductIdRoute,
+const AppshopRouteRouteChildren: AppshopRouteRouteChildren = {
+  AppshopIndexRoute: AppshopIndexRoute,
+  AppshopProductsProductIdRoute: AppshopProductsProductIdRoute,
 }
 
-const shopRouteRouteWithChildren = shopRouteRoute._addFileChildren(
-  shopRouteRouteChildren,
+const AppshopRouteRouteWithChildren = AppshopRouteRoute._addFileChildren(
+  AppshopRouteRouteChildren,
+)
+
+interface AppRouteRouteChildren {
+  AppauthRouteRoute: typeof AppauthRouteRouteWithChildren
+  AppshopRouteRoute: typeof AppshopRouteRouteWithChildren
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppauthRouteRoute: AppauthRouteRouteWithChildren,
+  AppshopRouteRoute: AppshopRouteRouteWithChildren,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
 )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  authRouteRoute: authRouteRouteWithChildren,
-  shopRouteRoute: shopRouteRouteWithChildren,
+  AppRouteRoute: AppRouteRouteWithChildren,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport

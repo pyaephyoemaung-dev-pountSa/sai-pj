@@ -1,7 +1,7 @@
 import { meQueryOptions } from '#/services/auth/queries'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/(shop)')({
+export const Route = createFileRoute('/_app/(shop)')({
     beforeLoad: async ({ context:{ queryClient, auth }})=> {
         const token = auth.token
         if (!token)

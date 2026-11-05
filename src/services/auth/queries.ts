@@ -12,6 +12,7 @@ const me = async () =>
             Authorization:`Bearer ${token}`,
         }
     })
+    console.log(response.data)
     return meSchema.parse(response.data)
 }
 export const meQueryOptions = queryOptions({

@@ -11,7 +11,7 @@ import { Categories } from "./components/categories";
 
 const HomePage = () =>
 {
-    const search = useSearch({from:"/(shop)/"})
+    const search = useSearch({from:"/_app"})
     const navigate = useNavigate();
     const [tab, setTab] = useState(search.category)
     const {data} = useProductsQuery(tab)

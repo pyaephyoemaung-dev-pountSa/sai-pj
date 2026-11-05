@@ -13,4 +13,11 @@ const navLink = [{
         link:'/register'
     }
 ]
+
+export const authLinks = [
+    {
+        title: 'Users',
+        link:'/users'
+    }
+]
 export default navLink;

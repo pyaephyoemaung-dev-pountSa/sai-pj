@@ -1,65 +1,95 @@
+import { Button } from "#/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "#/components/ui/card"
+import { Field, FieldError, FieldGroup, FieldLabel } from "#/components/ui/field"
+import { Input } from "#/components/ui/input"
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useLoginMutation } from "#/services/auth/mutation"
-import type { ILoginPayLoad } from "#/services/auth/type"
-import { useState } from "react"
 
+import z from "zod"
+import { Controller, useForm } from 'react-hook-form'
+
+const formSchema = z.object({
+    email:z.string().email({
+        message:'Invalid email'
+    }),
+    password:z.string().min(6),
+})
 const Login = () =>
 {
-    const [formData, setFormData] = useState<ILoginPayLoad>({
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
             email: '',
             password:''
+        }
     })
     const login = useLoginMutation()
+    function onSubmit(data: z.infer<typeof formSchema>)
+    {
+        login.mutate(data)
+    }
     return (
         <>
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-                <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">Register</h2>
-                
-                <form className="space-y-4" onSubmit={(e) =>
-                {
-                    e.preventDefault()
-                    login.mutate(formData)
-                }
-                }>
-                
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input 
-                    type="email" 
-                    value={formData.email}
-                            onChange={(e) =>
-                            {
-                        setFormData((prev)=>({...prev,email:e.target.value}))
-                    }}
-                    placeholder="you@example.com"
-                    className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
-                    required
-                    />
-                </div>
-                <div>
-                    <div className="flex justify-between items-center mb-1">
-                    <label className="block text-sm font-medium text-gray-700">Password</label>
-                    <a href="#" className="text-xs font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
-                    </div>
-                    <input 
-                    type="password" 
-                    value={formData.password}
-                    onChange={(e)=>(setFormData((prev)=>({...prev,password:e.target.value})))} 
-                    placeholder="••••••••"
-                    className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
-                    required
-                    />
-                </div>
+        <div className="flex justify-center my-auto">
+      <Card className="w-full sm:max-w-md mt-7">
+        <CardHeader>
+          <CardTitle>Login</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-demo-title">Email</FieldLabel>
 
-                <button 
-                    type="submit" 
-                    className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                >
-                    Sign In
-                </button>
-                </form>
-            </div>
-            </div>
+                    <Input
+                      {...field}
+                      id="form-rhf-demo-title"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="email@gmail.com"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-demo-description">
+                      Password
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="form-rhf-demo-title"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="*********"
+                      autoComplete="off"
+                    />
+
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </form>
+        </CardContent>
+        <CardFooter>
+          <Button type="submit" form="form-rhf-demo">
+            Login
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
         </>
     )
 }

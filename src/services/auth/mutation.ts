@@ -45,7 +45,7 @@ export const useLoginMutation = () =>
         {
             toast.success(data.message)
             setInfo(data.token,data.user)
-            navigate({to:'/dashboard'})
+            navigate({to:'/'})
             return data
         },
         onError: (data: { error: string }) =>

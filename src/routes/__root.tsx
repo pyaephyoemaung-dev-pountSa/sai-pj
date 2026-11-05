@@ -20,9 +20,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 function RootComponent() {
   return (
     <>
-      <Headers />
+      <div className='min-h-screen flex flex-col'>
       <Outlet />
+
+     
       <Footer/>
+      </div>
       <TanStackDevtools
         config={{
           position: 'bottom-right',
