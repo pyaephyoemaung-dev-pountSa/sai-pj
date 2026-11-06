@@ -7,6 +7,7 @@ import '../styles.css'
 import type { QueryClient } from '@tanstack/react-query'
 import { Footer } from '#/components/Layouts/footer'
 import type { IAuthStore } from '#/stores/useAuthStore'
+import { Toaster } from 'sonner'
 
 interface MyRouterContext
 {
@@ -21,11 +22,12 @@ function RootComponent() {
   return (
     <>
       <div className='min-h-screen flex flex-col'>
-      <Outlet />
-
-     
-      <Footer/>
+        <div className="">
+          <Outlet />
+        </div>
+        <Footer/>
       </div>
+        <Toaster position='top-center'/>
       <TanStackDevtools
         config={{
           position: 'bottom-right',

@@ -18,14 +18,14 @@ export const useRegisterMutation = () =>
         mutationFn: (payload: IRegisterPayLoad) => register(payload),
         onSuccess: (data) =>
         {
-            toast.success(data.message)
+            toast.success(data.message("Registration successful!"))
             setInfo(data.token, data.user)
-            navigation({to:'/dashboard'})
+            navigation({to:'/'})
             return data
         },
         onError: (data: { error: string }) =>
         {
-            toast.error(data.error)
+            toast.error("Fail to register!! please try again")
             return data
         }
     })
@@ -43,14 +43,14 @@ export const useLoginMutation = () =>
         mutationFn: (payload: ILoginPayLoad) => login(payload),
         onSuccess: (data) =>
         {
-            toast.success(data.message)
+            toast.success(data.message("Login successful!"))
             setInfo(data.token,data.user)
             navigate({to:'/'})
             return data
         },
         onError: (data: { error: string }) =>
         {
-            toast.error(data.error)
+            toast.error("Login fail!! please try again")
             return data
         }
     })

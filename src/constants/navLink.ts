@@ -1,13 +1,14 @@
-const navLink = [{
-    title: 'Shop',
-    link:'/'
-},
+const navLink = [
+    {
+        title: 'Shop',
+        link:'/'
+    },
     {
         title: 'Orders',
         link:'/orders',
     }, {
         title: 'Cart',
-        link:'/cart'
+        link:'/carts'
     }, {
         title: 'Register',
         link:'/register'

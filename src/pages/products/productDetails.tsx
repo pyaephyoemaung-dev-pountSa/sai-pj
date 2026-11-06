@@ -1,23 +1,26 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "#/components/ui/breadcrumb";
 import { Label } from "#/components/ui/label";
 import { getProductByIdQuery } from "#/services/products/queries";
-import { Route, useParams, useRouter, useSearch } from "@tanstack/react-router";
+import { Route, useNavigate, useParams, useRouter, useSearch } from "@tanstack/react-router";
 import { Star, StarHalf } from "lucide-react";
 import RatingCard from "../home/components/ratingCard";
 import ReviewCard from "../home/components/reviewCard";
-import { useEffect, useState, type ComponentProps } from "react";
+import { useEffect, useState  } from "react";
+import type {ComponentProps} from "react";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
+import { toast } from "sonner";
+import useCartStore from "#/stores/useCartStore";
 
 const productDetails = () =>
 {
 
-    const search = useSearch({ from: "/(shop)/products/$productId" })
+    const search = useSearch({ from: "/_app/(shop)/products/$productId" })
     const router = useRouter()
-    const { productId } = useParams({ from: "/(shop)/products/$productId" })
+    const { productId } = useParams({ from: "/_app/(shop)/products/$productId" })
     const { data } = getProductByIdQuery(productId)
-
+    const navigate = useNavigate()
     const [count, setCount] = useState<number>(1)
-
+    const { addCartItem } = useCartStore()
     const [previewImg, setPreviewImg] = useState('')
     useEffect(() =>
     {
@@ -44,7 +47,17 @@ const productDetails = () =>
             setCount(count - 1)
         }
     }
-
+    const addToCart = () =>
+    {
+        toast.success(`${data?.title} is added to cart.`)
+        if (data?.id)
+        {
+            addCartItem(data)
+        }
+        // navigate({
+            // to:'/carts'
+        // })
+    }
 
     return (
         <>
@@ -64,7 +77,7 @@ const productDetails = () =>
             </Breadcrumb>
             <div className="grid grid-cols-2 max-w-6xl mx-auto mt-8 gap-4">
                 <div className=""><img src={previewImg} className="size-90 bg-blue-100 rounded-xl" />
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 my-4">
                 {data?.images.map((img, idx) => (
                     <img
                     onClick={() => handleImg(img)}
@@ -88,7 +101,7 @@ const productDetails = () =>
                             <span className="px-4 py-2">{count}</span>
                             <Button disabled={count === (data?.stock || 0)} onClick={handleIncrese} title="+"/>
                         </div>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-full w-full">Add to cart ${((data?.price || 0) * count).toFixed(2)}</button>
+                        <button onClick={addToCart} className="bg-blue-500 text-white px-4 py-2 rounded-full w-full">Add to cart ${((data?.price || 0) * count).toFixed(2)}</button>
                     </div>
                     <ul>
                         <li className="flex justify-between"><span className="text-gray-500">SKU</span><span>{data?.sku}</span></li>
