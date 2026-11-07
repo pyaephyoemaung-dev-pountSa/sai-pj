@@ -52,7 +52,7 @@ const productDetails = () =>
         toast.success(`${data?.title} is added to cart.`)
         if (data?.id)
         {
-            addCartItem(data)
+            addCartItem({ ...data, quantity: count })
         }
         // navigate({
             // to:'/carts'

@@ -7,4 +7,5 @@ export const pdt = z.object({
     category: z.string(),
     stock: z.number(),
     thumbnail: z.string(),
+    quantity: z.number().default(1),
 })

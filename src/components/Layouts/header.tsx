@@ -36,7 +36,6 @@ const Header = () =>
                                     <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white shadow-sm ring-2 ring-white dark:ring-slate-900">
                                         {cartItems.length}
                                     </span>
-
                                 )}
                             </Link>
                         </li>

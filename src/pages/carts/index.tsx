@@ -1,4 +1,3 @@
-import type { ICartItem } from '#/services/carts/type';
 import useCartStore from '#/stores/useCartStore';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,56 +25,51 @@ import {
   Truck,
   Shield,
 } from 'lucide-react';
-import { useState } from 'react';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 
 const CartPage = () =>
 {
-  const { cartItems, clearCartItems } = useCartStore()
-  const [items, setItems] = useState<ICartItem[]>([])
+  const navigate = useNavigate()
+  const {
+    cartItems,
+    clearCartItems,
+    removeCartItem,
+    updateCartItemQuantity,
+  } = useCartStore()
   const removeItem = (id:number) =>
   {
-    
+    removeCartItem(id)
   }
-  const subtotal = items.reduce(
+  const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
   const updateQuantity = (id:number,change:number) =>
   {
-    setItems((prev) =>
+    const item = cartItems.find((cartItem) => cartItem.id === id)
+    if (item)
     {
-      prev.map((item) =>
-      {
-        if (item.id === id)
-        {
-          const newQty = Math.max(1, Math.min(item.stock, item.quantity + change))
-          return {...item,quantity:newQty}
-        }
-      })
-      //    if ( === id)
-      // {
-      //   const newQty = Math.max(1, Math.min(item.stock, item.stock + change));
-      //   return { ...item, quantity: newQty };
-      // }
-    
-      return prev
-    })
-    // setItems((prev) => prev.map((item) =>
-    // {
-    //   if (item.id === id)
-    //   {
-    //     const newQty = Math.max(1, Math.min(item.stock, item.stock + change));
-    //     return { ...item, quantity: newQty };
-    //   }
-    //   return items
-    // }))
-    
+      updateCartItemQuantity(id, item.quantity + change)
+    }
   }
   const cancelAllItem = () =>
     {
       clearCartItems();
     }
+  const checkout = () =>
+  {
+    if (cartItems.length === 0)
+    {
+      toast.error('Your cart is empty')
+      return
+    }
+
+    clearCartItems()
+    toast.success('Order placed successfully')
+    navigate({ to: '/orders' })
+  }
 
   return (
     <div className="mx-auto w-full max-w-7xl p-6">
@@ -87,6 +81,20 @@ const CartPage = () =>
           </div>
 
           <div className="space-y-4">
+            {cartItems.length === 0 && (
+              <Card>
+                <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
+                  <Package className="text-muted-foreground h-10 w-10" />
+                  <div>
+                    <h2 className="font-medium">Your cart is empty</h2>
+                    <p className="text-muted-foreground text-sm">Add products to start an order.</p>
+                  </div>
+                  <Button>
+                    <Link to="/">Continue shopping</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
             {cartItems.map((item) => (
               <Card key={item.id} className="overflow-hidden p-0">
                 <CardContent className="p-0">
@@ -129,7 +137,7 @@ const CartPage = () =>
                             <Minus className="h-4 w-4" />
                           </Button>
                           <span className="w-8 text-center">
-                            {item.stock}
+                            {item.quantity}
                           </span>
                           <Button
                             variant="outline"
@@ -142,11 +150,11 @@ const CartPage = () =>
 
                         <div className="text-right">
                           <div className="font-medium">
-                            ${(item.price * item.stock).toFixed(2)}
+                            ${(item.price * item.quantity).toFixed(2)}
                           </div>
                           {item.price && (
                             <div className="text-muted-foreground text-sm line-through">
-                              ${(item.price * item.stock).toFixed(2)}
+                              ${(item.price * item.quantity).toFixed(2)}
                             </div>
                           )}
                         </div>
@@ -208,7 +216,7 @@ const CartPage = () =>
               </div>
 
               {/* Checkout Button */}
-              <Button className="w-full">
+              <Button className="w-full" onClick={checkout} disabled={cartItems.length === 0}>
                 <CreditCard className="mr-2 h-4 w-4" />
                 Proceed to Checkout
               </Button>

@@ -27,7 +27,7 @@ function RootComponent() {
         </div>
         <Footer/>
       </div>
-        <Toaster position='top-center'/>
+      <Toaster position='top-right' duration={1000} />
       <TanStackDevtools
         config={{
           position: 'bottom-right',
